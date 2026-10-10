@@ -18,7 +18,8 @@
     "verify": "npm run typecheck && npm run lint && npm run test && npm run build",
     "build:static": "GLOWY_MOVE_STATIC=1 next build",
     "test:e2e": "node e2e/smoke.mjs",
-    "test:static": "node e2e/static.mjs"
+    "test:static": "node e2e/static.mjs",
+    "test:onda1": "node e2e/onda1.mjs"
   },
   "dependencies": {
     "@fontsource-variable/inter": "^5.3.0",

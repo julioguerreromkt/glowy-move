@@ -73,7 +73,7 @@ export const PLAN_PRESETS: PlanPreset[] = [
     id: 'upper-lower',
     name: 'Upper / Lower',
     tagline: 'Superior e inferior',
-    description: 'Alterna um dia de tronco e um dia de pernas, quatro vezes por semana. Bom equilíbrio entre volume e recuperação.',
+    description: 'Alterna um dia de tronco e um dia de pernas, quatro vezes por semana. Bom equilíbrio entre volume e descanso.',
     goal: 'Hipertrofia',
     level: 'Intermediário',
     minutes: 60,
