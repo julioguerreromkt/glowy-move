@@ -11,6 +11,7 @@ export const RESET_ANALYSIS_EVENT = 'form:reset-analysis';
 const NAV = [
   { href: '/exercicios', label: 'Exercícios' },
   { href: '/rotina', label: 'Rotina' },
+  { href: '/treino', label: 'Treino' },
   { href: '/registro', label: 'Registro' },
   { href: '/', label: 'Analisar vídeo' },
 ];
