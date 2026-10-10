@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
-import { CalendarDays, Cpu, RefreshCw, Shuffle, Sparkles } from 'lucide-react';
+import { CalendarDays, Cpu, LayoutGrid, RefreshCw, Shuffle, Sparkles } from 'lucide-react';
 import {
   DEFAULT_PLANNER_INPUT,
   GOALS,
@@ -24,6 +24,7 @@ import {
   type WeeklyPlan,
 } from '@/lib/planner';
 import { MUSCLE_GROUPS, type Exercise, type MuscleGroup } from '@/lib/types';
+import { PLAN_PRESETS, buildPresetPlan, type PlanPreset } from '@/lib/plans/presets';
 
 function Chip({
   active,
@@ -57,6 +58,7 @@ export function PlannerSurface({ exercises }: { exercises: Exercise[] }) {
   const [rotation, setRotation] = useState(0);
   const [errors, setErrors] = useState<string[]>([]);
   const [restored, setRestored] = useState(false);
+  const [loadedPresetId, setLoadedPresetId] = useState<string | null>(null);
 
   useEffect(() => {
     try {
@@ -97,9 +99,23 @@ export function PlannerSurface({ exercises }: { exercises: Exercise[] }) {
       setPlan(next);
       setRotation(nextRotation);
       setRestored(false);
+      setLoadedPresetId(null);
       persist(next);
     },
     [exercises, input, persist],
+  );
+
+  const loadPreset = useCallback(
+    (preset: PlanPreset) => {
+      const next = buildPresetPlan(preset, exercises);
+      setPlan(next);
+      setRotation(0);
+      setRestored(false);
+      setErrors([]);
+      setLoadedPresetId(preset.id);
+      persist(next);
+    },
+    [exercises, persist],
   );
 
   const toggleDay = (day: DayKey) => {
@@ -279,6 +295,47 @@ export function PlannerSurface({ exercises }: { exercises: Exercise[] }) {
             </>
           ) : null}
         </div>
+      </section>
+
+      <section aria-labelledby="planos-prontos" className="mt-10 card p-5 sm:p-7">
+        <div className="flex items-center gap-2">
+          <LayoutGrid aria-hidden="true" className="h-4 w-4 text-subtle" />
+          <h2 id="planos-prontos" className="display text-[24px] text-ink">
+            Planos prontos
+          </h2>
+        </div>
+        <p className="mt-2 text-sm text-muted">
+          Carregue uma estrutura clássica e ela vira sua rotina da semana, pronta para ajustar com os controles acima.
+        </p>
+        <ul className="mt-6 grid gap-3 sm:grid-cols-2">
+          {PLAN_PRESETS.map((preset) => {
+            const active = loadedPresetId === preset.id;
+            return (
+              <li key={preset.id}>
+                <button
+                  type="button"
+                  onClick={() => loadPreset(preset)}
+                  aria-pressed={active}
+                  className={`flex h-full w-full flex-col items-start rounded-card border p-4 text-left transition-colors ${
+                    active ? 'border-cyan bg-elevated' : 'border-line bg-elevated hover:border-muted'
+                  }`}
+                >
+                  <span className="flex w-full items-center justify-between gap-2">
+                    <span className="text-sm font-semibold text-ink">{preset.name}</span>
+                    <span className="text-[11px] font-medium text-subtle">{preset.days.length}x / semana</span>
+                  </span>
+                  <span className="mt-0.5 text-xs text-subtle">{preset.tagline}</span>
+                  <span className="mt-2 text-xs leading-relaxed text-muted">{preset.description}</span>
+                  {active ? (
+                    <span className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-cyan px-2.5 py-1 text-[11px] font-semibold text-canvas">
+                      Carregado na rotina
+                    </span>
+                  ) : null}
+                </button>
+              </li>
+            );
+          })}
+        </ul>
       </section>
 
       {plan ? (
