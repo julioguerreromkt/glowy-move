@@ -1,0 +1,36 @@
+# Glowy Move
+# Configuração para hospedagem Apache (Hostinger e similares).
+
+# 1) Tipos MIME que o motor de análise precisa.
+#    Sem application/wasm o navegador recusa carregar o runtime do MediaPipe.
+AddType application/wasm .wasm
+AddType application/octet-stream .task
+AddType font/woff2 .woff2
+
+# 2) Cache longo para os arquivos com hash no nome, curto para o HTML.
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType application/wasm "access plus 1 year"
+  ExpiresByType font/woff2 "access plus 1 year"
+  ExpiresByType text/css "access plus 1 year"
+  ExpiresByType text/javascript "access plus 1 year"
+  ExpiresByType text/html "access plus 5 minutes"
+</IfModule>
+
+# 3) Compressão de texto. O .wasm já vem comprimido, então fica de fora.
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/css text/javascript application/javascript application/json image/svg+xml
+</IfModule>
+
+# 4) URLs limpas: /exercicios serve /exercicios/index.html.
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteCond %{REQUEST_URI} !\.[a-zA-Z0-9]{2,5}$
+  RewriteRule ^(.*)$ /$1/index.html [L]
+</IfModule>
+
+# 5) Página de erro do próprio aplicativo.
+ErrorDocument 404 /404.html
