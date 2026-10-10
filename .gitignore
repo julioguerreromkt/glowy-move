@@ -1,5 +1,11 @@
-﻿node_modules/
-.next/
-dist/
-.env
-.env.local
+node_modules
+.next
+out
+data
+public/mediapipe
+public/models
+e2e/screenshot-*.png
+*.tsbuildinfo
+.env*.local
+.vercel
+out

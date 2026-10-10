@@ -1,0 +1,156 @@
+@import '@fontsource-variable/outfit/wght.css';
+@import '@fontsource-variable/inter/wght.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ROTA 1 — Deep Ocean Cyan (glowy-brand-guidelines).
+   Tokens travados: fundo #0A1628, acento #00FFFF,
+   texto #E8EEF4 / #A8B8C8 / #7A8FA0, Outfit + Inter. */
+:root {
+  --font-display: 'Outfit Variable', 'Outfit', ui-sans-serif, system-ui, sans-serif;
+  --font-body: 'Inter Variable', 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --ink: #e8eef4;
+  --muted: #a8b8c8;
+  --subtle: #7a8fa0;
+  --canvas: #0a1628;
+  --surface: #0e1d33;
+  --elevated: #13253e;
+  --line: #1e3450;
+  --cyan: #00ffff;
+  --cyan-deep: #00c4c4;
+  --night: #060f1d;
+  color-scheme: dark;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+/* Fundo funcional é sólido: sem gradiente decorativo. */
+body {
+  background-color: var(--canvas);
+  color: var(--ink);
+  overflow-x: hidden;
+}
+
+@layer base {
+  * {
+    @apply border-line;
+  }
+
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--cyan);
+    outline-offset: 3px;
+    border-radius: 6px;
+  }
+
+  ::selection {
+    background: var(--cyan);
+    color: var(--canvas);
+  }
+}
+
+@layer components {
+  .display {
+    @apply font-display font-bold tracking-tightest leading-[1.02];
+  }
+
+  .eyebrow {
+    @apply font-display text-[11px] font-semibold uppercase tracking-[0.2em] text-subtle;
+  }
+
+  /* Hierarquia vem de borda e espaço, não de sombra. */
+  .card {
+    @apply rounded-card border border-line bg-surface;
+  }
+
+  .pill {
+    @apply inline-flex items-center gap-1.5 rounded-full border border-line bg-elevated px-3 py-1.5 text-[12px] font-medium text-muted;
+  }
+
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-full px-5 py-3 text-sm font-semibold transition-colors duration-150 disabled:cursor-not-allowed disabled:opacity-45;
+  }
+
+  /* Ação principal: o único uso sólido do acento. */
+  .btn-accent {
+    @apply btn bg-cyan text-canvas hover:bg-cyan-deep;
+  }
+
+  /* Ação sólida secundária, em neutro. */
+  .btn-primary {
+    @apply btn bg-ink text-canvas hover:bg-muted;
+  }
+
+  .btn-ghost {
+    @apply btn border border-line bg-transparent text-ink hover:bg-elevated;
+  }
+
+  .field {
+    @apply w-full rounded-lg border border-line bg-elevated px-3.5 py-2.5 text-sm text-ink outline-none transition-colors placeholder:text-subtle focus:border-cyan;
+  }
+
+  /* Estado selecionado em neutro invertido: não gasta o acento. */
+  .chip-on {
+    @apply border-ink bg-ink text-canvas;
+  }
+
+  .chip-off {
+    @apply border-line bg-elevated text-ink hover:border-muted;
+  }
+
+  /* Miniatura que não carregou não deve derramar o texto alternativo na tela.
+     O alt continua disponível para leitores de tela. */
+  img[data-thumb] {
+    @apply bg-elevated text-transparent;
+  }
+}
+
+/* O produto respeita quem pediu menos movimento no sistema. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@keyframes glowy-pulse {
+  0%,
+  100% {
+    opacity: 0.45;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.joint-pulse {
+  animation: glowy-pulse 2.6s ease-in-out infinite;
+}
+
+@keyframes glowy-rise {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.rise {
+  animation: glowy-rise 260ms ease-out both;
+}
